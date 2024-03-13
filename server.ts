@@ -7,8 +7,10 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+const DEFAULT_PAGE_SIZE = 10;
 
 app.get("/:formId/filteredResponses", async (req: Request, res: Response) => {
+  const pageSize = parseInt(req.query.pageSize as string) || DEFAULT_PAGE_SIZE;
   const { formId } = req.params;
 
   const filters: ResponseFiltersType = req.query.filters
@@ -43,10 +45,12 @@ app.get("/:formId/filteredResponses", async (req: Request, res: Response) => {
       });
     });
 
+    const newPageCount = Math.ceil(filteredResponses.length / pageSize);
+
     res.json({
       responses: filteredResponses,
       totalResponses: filteredResponses.length,
-      pageCount: data.pageCount,
+      pageCount: newPageCount,
     });
   } catch (error) {
     console.error("Error fetching form responses:", error);
