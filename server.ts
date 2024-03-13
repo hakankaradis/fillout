@@ -7,10 +7,10 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 150;
 
 app.get("/:formId/filteredResponses", async (req: Request, res: Response) => {
-  const pageSize = parseInt(req.query.pageSize as string) || DEFAULT_PAGE_SIZE;
+  const pageSize = parseInt(req.query.limit as string) || DEFAULT_PAGE_SIZE;
   const { formId } = req.params;
 
   const filters: ResponseFiltersType = req.query.filters
